@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rotating Shapes</title>
+</head>
+<body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r132/three.min.js"></script>
+  <script>
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    const vertices = new Float32Array([
+      -1, -1, -1,
+      1, -1, -1,
+      1, -1, 1,
+      -1, -1, 1,
+      0, 1, 0,
+    ]);
+
+    const indices = new Uint16Array([
+      0, 1, 4,
+      1, 2, 4,
+      2, 3, 4,
+      3, 0, 4,
+      0, 2, 1,
+      0, 3, 2,
+    ]);
+
+    const geometry = new THREE.BufferGeometry();
+    const positionAttribute = new THREE.BufferAttribute(vertices, 3);
+    const indexAttribute = new THREE.BufferAttribute(indices, 1);
+
+    geometry.setAttribute('position', positionAttribute);
+    geometry.setIndex(indexAttribute);
+
+    const material = new THREE.MeshBasicMaterial({ color: 0xff6600 });
+    const prism = new THREE.Mesh(geometry, material);
+    scene.add(prism);
+
+    camera.position.z = 5;
+
+    const animate = function () {
+      requestAnimationFrame(animate);
+
+      prism.rotation.x += 0.01;
+      prism.rotation.y += 0.01;
+
+      renderer.render(scene, camera);
+    };
+
+    animate();
+  </script>
+</body>
+</html>
